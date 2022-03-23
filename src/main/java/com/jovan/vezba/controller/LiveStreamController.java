@@ -4,8 +4,10 @@ import com.jovan.vezba.model.LiveStream;
 import com.jovan.vezba.repository.LiveStreamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,22 @@ public class LiveStreamController {
     // POST REQUEST localhost:8080/streams
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LiveStream create(@RequestBody LiveStream stream){
+    //@Valid annotation forces the check of constraints inside the model record (@NotEmpty)
+    public LiveStream create(@Valid @RequestBody LiveStream stream){
         return repository.create(stream);
+    }
+
+    // PUT REQUEST localhost:8080/streams/1234-1234-123456-123
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestBody LiveStream stream, @PathVariable String id) {
+        repository.update(stream, id);
+    }
+
+    // DELETE REQUEST localhost:8080/streams/1234-1234-123456-123
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable String id) {
+        repository.delete(id);
     }
 }
